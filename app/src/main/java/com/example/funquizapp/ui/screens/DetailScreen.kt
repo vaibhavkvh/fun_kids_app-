@@ -19,18 +19,30 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.funquizapp.ui.theme.FunQuizAppTheme
+import com.example.funquizapp.ui.viewmodel.MainViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DetailScreen(navController: NavHostController?, myArg: String?) {
+fun DetailScreen(navController: NavHostController?, myArg: String?,     myViewModel: MainViewModel
+) {
+    var randomColor by remember { mutableStateOf(Color.Unspecified) }
+
+    if (myArg.equals("Color", true)) {
+        randomColor = myViewModel.getRandomColor()
+    }
     Scaffold(modifier = Modifier.fillMaxSize(), topBar = {
         TopAppBar(title = { Text(myArg!!) }, navigationIcon = {
             if (navController?.previousBackStackEntry != null) {
@@ -50,20 +62,21 @@ fun DetailScreen(navController: NavHostController?, myArg: String?) {
         ) {
             // Box (70% height, full width)
             Box(
-                modifier = Modifier.padding(innderPadding)
+                modifier = Modifier
+                    .padding(innderPadding)
                     .fillMaxWidth()
                     .fillMaxHeight(0.8f) // 70% of the available height
-                    .background(Color.LightGray)
+                    .background(randomColor)
             ) {
                 Text("70% Height Box", modifier = Modifier.align(Alignment.Center))
             }
 
             // Button
-            Button(
-                onClick = { /* Handle button click */ },
+            OutlinedButton(
+                onClick = { randomColor = myViewModel.getRandomColor() },
                 modifier = Modifier.padding(16.dp)
             ) {
-                Text("Click Me")
+                Text("Next")
             }
         }
     }
@@ -71,10 +84,3 @@ fun DetailScreen(navController: NavHostController?, myArg: String?) {
 }
 
 
-@Preview
-@Composable
-fun DetailScreenPreview() {
-    FunQuizAppTheme {
-        DetailScreen(null, null)
-    }
-}

@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -13,14 +14,17 @@ import androidx.navigation.navArgument
 import com.example.funquizapp.ui.screens.DetailScreen
 import com.example.funquizapp.ui.screens.HomeScreen
 import com.example.funquizapp.ui.theme.FunQuizAppTheme
+import com.example.funquizapp.ui.viewmodel.MainViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            val myViewModel: MainViewModel = viewModel()
+
             FunQuizAppTheme {
-                    NavigateCompose()
+                    NavigateCompose(myViewModel)
 
             }
         }
@@ -29,7 +33,7 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
-fun NavigateCompose() {
+fun NavigateCompose(myViewModel: MainViewModel) {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "screen1"){
         composable("screen1"){
@@ -41,7 +45,7 @@ fun NavigateCompose() {
             arguments = listOf(navArgument("myArg") { type = NavType.StringType })){navBackStackEntry->
             val myArg = navBackStackEntry.arguments?.getString("myArg")
             DetailScreen(
-                navController,myArg
+                navController,myArg,myViewModel
             )
         }
     }
