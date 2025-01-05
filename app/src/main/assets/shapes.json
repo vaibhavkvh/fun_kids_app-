@@ -1,0 +1,12 @@
+[
+  { "name": "Circle", "description": "A round shape with no corners or edges." },
+  { "name": "Square", "description": "A shape with four equal sides and four right angles." },
+  { "name": "Triangle", "description": "A shape with three sides and three corners." },
+  { "name": "Rectangle", "description": "A shape with four sides and four right angles, with opposite sides being equal." },
+  { "name": "Oval", "description": "A shape that looks like a stretched-out circle." },
+  { "name": "Star", "description": "A shape with five or more points." },
+  { "name": "Heart", "description": "A shape that resembles the symbol of love." },
+  { "name": "Diamond", "description": "A shape with four sides, like a square tilted on one corner." },
+  { "name": "Pentagon", "description": "A shape with five sides and five corners." },
+  { "name": "Hexagon", "description": "A shape with six sides and six corners." }
+]

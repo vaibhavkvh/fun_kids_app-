@@ -1,13 +1,17 @@
 package com.example.funquizapp.datasource
 
 import android.content.Context
+import androidx.compose.ui.geometry.isEmpty
 import androidx.compose.ui.graphics.Color
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.IOException
+import javax.inject.Inject
 
-class ColorRepository(private val context: Context) {
-
+class ColorRepository @Inject constructor(@ApplicationContext private val context: Context) {
+    private var colorList: MutableList<com.example.funquizapp.data.Color> = mutableListOf()
+    private var currentIndex = 0
     fun getColors(): List<com.example.funquizapp.data.Color> {
         return try {
             val jsonString = context.assets.open("colors.json").bufferedReader().use { it.readText() }
@@ -19,13 +23,15 @@ class ColorRepository(private val context: Context) {
         }
     }
 
-    fun getRandomColor(): Color {
-        val colors = getColors()
+    fun getRandomColor(): com.example.funquizapp.data.Color {
+        if (colorList.isEmpty()) {
+            colorList.addAll(getColors())
+            colorList.shuffle()
+        }
 
-
-        val randomIndex = (0 until colors.size).random()
-        val randomColorData = colors[randomIndex]
-        return parseColor(randomColorData.hex)
+        val color = colorList[currentIndex]
+        currentIndex = (currentIndex + 1) % colorList.size
+        return color
     }
 
     private fun parseColor(hex: String): Color {

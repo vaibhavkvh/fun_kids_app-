@@ -15,16 +15,17 @@ import com.example.funquizapp.ui.screens.DetailScreen
 import com.example.funquizapp.ui.screens.HomeScreen
 import com.example.funquizapp.ui.theme.FunQuizAppTheme
 import com.example.funquizapp.ui.viewmodel.MainViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            val myViewModel: MainViewModel = viewModel()
 
             FunQuizAppTheme {
-                    NavigateCompose(myViewModel)
+                NavigateCompose()
 
             }
         }
@@ -33,19 +34,23 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
-fun NavigateCompose(myViewModel: MainViewModel) {
+fun NavigateCompose() {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = "screen1"){
-        composable("screen1"){
+    NavHost(navController = navController, startDestination = "screen1") {
+        composable("screen1") {
             HomeScreen(
                 navController
             )
         }
-        composable(    route = "screen2/{myArg}",
-            arguments = listOf(navArgument("myArg") { type = NavType.StringType })){navBackStackEntry->
+        composable(
+            route = "screen2/{myArg}",
+            arguments = listOf(navArgument("myArg") { type = NavType.StringType })
+        ) { navBackStackEntry ->
+
+
             val myArg = navBackStackEntry.arguments?.getString("myArg")
             DetailScreen(
-                navController,myArg,myViewModel
+                navController, myArg
             )
         }
     }
