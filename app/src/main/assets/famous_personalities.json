@@ -1,0 +1,27 @@
+[
+    {
+        "name": "Mahatma Gandhi",
+        "imageName": "mahatma_gandhi.png",
+        "description": "Father of the Nation and leader of India's independence."
+    },
+    {
+        "name": "APJ Abdul Kalam",
+        "imageName": "apj_abdul_kalam.png",
+        "description": "Missile Man of India and former President."
+    },
+    {
+        "name": "Sachin Tendulkar",
+        "imageName": "sachin_tendulkar.png",
+        "description": "Legendary cricketer known as the 'God of Cricket'."
+    },
+    {
+        "name": "Narendra Modi",
+        "imageName": "narendra_modi.png",
+        "description": "Prime Minister of India since 2014."
+    },
+    {
+        "name": "Sardar Vallabhbhai Patel",
+        "imageName": "sardar_vallabhbhai_patel.png",
+        "description": "Iron Man of India and unifier of the nation."
+    }
+]

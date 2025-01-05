@@ -62,6 +62,36 @@ fun HomeScreen( navController: NavHostController?) {
             ) {
                 Text("Number")
             }
+            OutlinedButton(
+                onClick = {
+                    navController?.navigate("screen2/Letter")
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 5.dp, horizontal = 8.dp)
+            ) {
+                Text("Letter")
+            }
+            OutlinedButton(
+                onClick = {
+                    navController?.navigate("screen2/Community Helper")
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 5.dp, horizontal = 8.dp)
+            ) {
+                Text("Community Helper")
+            }
+            OutlinedButton(
+                onClick = {
+                    navController?.navigate("screen2/UnsungHero")
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 5.dp, horizontal = 8.dp)
+            ) {
+                Text("Unsung Hero")
+            }
         }
     }
 

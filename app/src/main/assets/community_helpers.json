@@ -1,0 +1,52 @@
+[
+    {
+        "name": "Doctor",
+        "imageName": "doctor.png",
+        "description": "Helps you stay healthy."
+    },
+    {
+        "name": "Veterinarian",
+        "imageName": "veterinarian.png",
+        "description": "Cares for sick animals."
+    },
+    {
+        "name": "Farmer",
+        "imageName": "farmer.png",
+        "description": "Grows food for everyone."
+    },
+    {
+        "name": "Sweeper",
+        "imageName": "sweeper.png",
+        "description": "Keeps places clean."
+    },
+    {
+        "name": "Tailor",
+        "imageName": "tailor.png",
+        "description": "Makes and mends clothes."
+    },
+    {
+        "name": "Teacher",
+        "imageName": "teacher.png",
+        "description": "Helps you learn new things."
+    },
+    {
+        "name": "Coach",
+        "imageName": "coach.png",
+        "description": "Teaches you sports skills."
+    },
+    {
+        "name": "Cobbler",
+        "imageName": "cobbler.png",
+        "description": "Fixes and makes shoes."
+    },
+    {
+        "name": "Driver",
+        "imageName": "driver.png",
+        "description": "Drives vehicles safely."
+    },
+    {
+        "name": "Firefighter",
+        "imageName": "firefighter.png",
+        "description": "Puts out fires and saves lives."
+    }
+]

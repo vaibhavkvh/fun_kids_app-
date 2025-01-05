@@ -1,11 +1,14 @@
 package com.example.funquizapp.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,12 +29,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -39,6 +43,7 @@ import androidx.core.graphics.toColorInt
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.funquizapp.data.Color
+import com.example.funquizapp.data.CommunityHelper
 import com.example.funquizapp.data.Shape
 import com.example.funquizapp.ui.viewmodel.MainViewModel
 
@@ -51,13 +56,21 @@ fun DetailScreen(
     val myViewModel: MainViewModel = hiltViewModel()
     var randomColor by remember { mutableStateOf(Color("", "")) }
     var randomShape by remember { mutableStateOf(Shape("", "")) }
+    var randomCommunityHelper by remember { mutableStateOf(CommunityHelper("", "", "")) }
+    var randomPersonalities by remember { mutableStateOf(CommunityHelper("", "", "")) }
     var number by remember { mutableStateOf(0) }
+    var letter by remember { mutableStateOf(' ') }
 
     if (myArg.equals("Color", true)) {
-
         randomColor = myViewModel.getRandomColor()
     } else if (myArg.equals("Number", true)) {
         number = myViewModel.getNextNumber()
+    } else if (myArg.equals("Letter", true)) {
+        letter = myViewModel.getNextLetter()
+    } else if (myArg.equals("Community Helper", true)) {
+        randomCommunityHelper = myViewModel.getRandomCommunityHelper()
+    }  else if (myArg.equals("UnsungHero", true)) {
+        randomPersonalities = myViewModel.getPersonality()
     } else {
         randomShape = myViewModel.getRandomShape()
     }
@@ -79,56 +92,16 @@ fun DetailScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             if (myArg.equals("Color", true)) {
-                Box(
-                    modifier = Modifier
-                        .padding(innderPadding)
-                        .border(width = 2.dp, color = androidx.compose.ui.graphics.Color.Black)
-                        .fillMaxWidth()
-                        .fillMaxHeight(0.8f) // 70% of the available height
-                        .background(
-                            color = androidx.compose.ui.graphics.Color("${randomColor?.hex}".toColorInt())
-                        )
-                ) {
-                    randomColor?.name?.let {
-                        Text(
-                            it,
-                            style = TextStyle(
-                                shadow = Shadow(
-                                    color = androidx.compose.ui.graphics.Color.DarkGray,
-                                    offset = Offset(2f, 2f),
-                                    blurRadius = 1f
-                                ), color = androidx.compose.ui.graphics.Color.White
-                            ),
-                            modifier = Modifier
-                                .align(Alignment.Center)
-
-                        )
-                    }
-                }
+                ColorWidget(innderPadding, randomColor)
             } else if (myArg.equals("Number", true)) {
-                Box(
-                    modifier = Modifier
-                        .padding(innderPadding)
-                        .border(width = 2.dp, color = androidx.compose.ui.graphics.Color.Black)
-                        .fillMaxWidth()
-                        .background(color = _root_ide_package_.androidx.compose.ui.graphics.Color.Green)
-                        .fillMaxHeight(0.8f) // 70% of the available height
-                ) {
-                    Text(
-                        number.toString(),
-                        style = TextStyle(
-                            fontSize = 50.sp, shadow = Shadow(
-                                color = androidx.compose.ui.graphics.Color.Gray,
-                                offset = Offset(2f, 2f),
-                                blurRadius = 1f
-                            )
-                        ),
-                        modifier = Modifier
-                            .align(Alignment.Center)
-
-                    )
-                }
-            } else {
+                NumberComposable(innderPadding, number.toString())
+            } else if (myArg.equals("Letter", true)) {
+                LetterComposable(innderPadding, letter.toString())
+            } else if (myArg.equals("Community Helper", true) ) {
+                CommunityHelperComposable(myViewModel, randomCommunityHelper)
+            } else if(myArg.equals("UnsungHero", true)){
+                CommunityHelperComposable(myViewModel, randomPersonalities)
+            }else {
                 DrawShape(shape = randomShape, modifier = Modifier)
             }
 
@@ -141,6 +114,12 @@ fun DetailScreen(
                         randomColor = myViewModel.getRandomColor()
                     } else if (myArg.equals("Number", true)) {
                         number = myViewModel.getNextNumber()
+                    } else if (myArg.equals("Letter", true)) {
+                        letter = myViewModel.getNextLetter()
+                    } else if (myArg.equals("Community Helper", true)) {
+                        randomCommunityHelper = myViewModel.getRandomCommunityHelper()
+                    }  else if (myArg.equals("UnsungHero", true)) {
+                        randomPersonalities = myViewModel.getPersonality()
                     } else {
                         randomShape = myViewModel.getRandomShape()
                     }
@@ -150,6 +129,123 @@ fun DetailScreen(
             ) {
                 Text("Next")
             }
+        }
+    }
+}
+
+@Composable
+fun CommunityHelperComposable(myViewModel: MainViewModel, helper: CommunityHelper) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(24.dp)
+            .fillMaxHeight(0.8f)
+            .padding(12.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+    ) {
+        Log.i("LOGVBV","helper.imageName ${helper.imageName}")
+        Log.i("LOGVBV","helper.name ${helper.name}")
+        val imageResourceId = myViewModel.getImageResourceId(helper.imageName)
+
+        Image(
+            painter = painterResource(id = imageResourceId),
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize(0.8f)
+
+        )
+
+        Text(
+            helper.name,
+            style = TextStyle(
+                fontSize = 50.sp, shadow = Shadow(
+                    color = androidx.compose.ui.graphics.Color.Gray,
+                    offset = Offset(2f, 2f),
+                    blurRadius = 1f
+                )
+            ),
+            modifier = Modifier
+        )
+    }
+}
+
+@Composable
+fun LetterComposable(innderPadding: PaddingValues, letter: String) {
+    Box(
+        modifier = Modifier
+            .padding(innderPadding)
+            .border(width = 2.dp, color = androidx.compose.ui.graphics.Color.Black)
+            .fillMaxWidth()
+            .fillMaxHeight(0.8f) // 70% of the available height
+    ) {
+        Text(
+            letter,
+            style = TextStyle(
+                fontSize = 100.sp, shadow = Shadow(
+                    color = androidx.compose.ui.graphics.Color.Gray,
+                    offset = Offset(2f, 2f),
+                    blurRadius = 1f
+                )
+            ),
+            modifier = Modifier
+                .align(Alignment.Center)
+
+        )
+    }
+}
+
+@Composable
+fun NumberComposable(innderPadding: PaddingValues, number: String) {
+    Box(
+        modifier = Modifier
+            .padding(innderPadding)
+            .border(width = 2.dp, color = androidx.compose.ui.graphics.Color.Black)
+            .fillMaxWidth()
+            .background(color = _root_ide_package_.androidx.compose.ui.graphics.Color.Green)
+            .fillMaxHeight(0.8f) // 70% of the available height
+    ) {
+        Text(
+            number,
+            style = TextStyle(
+                fontSize = 50.sp, shadow = Shadow(
+                    color = androidx.compose.ui.graphics.Color.Gray,
+                    offset = Offset(2f, 2f),
+                    blurRadius = 1f
+                )
+            ),
+            modifier = Modifier
+                .align(Alignment.Center)
+
+        )
+    }
+}
+
+@Composable
+fun ColorWidget(innderPadding: PaddingValues, randomColor: Color) {
+    Box(
+        modifier = Modifier
+            .padding(innderPadding)
+            .border(width = 2.dp, color = androidx.compose.ui.graphics.Color.Black)
+            .fillMaxWidth()
+            .fillMaxHeight(0.8f) // 70% of the available height
+            .background(
+                color = androidx.compose.ui.graphics.Color("${randomColor?.hex}".toColorInt())
+            )
+    ) {
+        randomColor?.name?.let {
+            Text(
+                it,
+                style = TextStyle(
+                    shadow = Shadow(
+                        color = androidx.compose.ui.graphics.Color.DarkGray,
+                        offset = Offset(2f, 2f),
+                        blurRadius = 1f
+                    ), color = androidx.compose.ui.graphics.Color.White
+                ),
+                modifier = Modifier
+                    .align(Alignment.Center)
+
+            )
         }
     }
 }
@@ -186,6 +282,7 @@ fun DrawShape(shape: Shape, modifier: Modifier = Modifier) {
                         color = color,
                         size = Size(size.width, size.height / 2)
                     )
+
                     "rectangle" -> drawRect(color = color, size = size)
 
                     "triangle" -> drawTriangle(color = color, size = size)
